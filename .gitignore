@@ -1,0 +1,5 @@
+bin
+.vscode
+./src/*.env
+./src/*.class
+./src/*/.class
