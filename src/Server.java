@@ -35,7 +35,7 @@ public class Server {
         
     };
 
-    // To load the credentials
+    // To load the credentials which will be worked upon later....
     private static void initializer() throws IOException {
         prop.load(Files.newInputStream(Path.of("./bin/.env")));
 
@@ -43,16 +43,19 @@ public class Server {
 
     // When Client Disconnects
     public static void disconnect(Clients client) {
-        String msg = "User "+client.name+"is now offline.";
+        String msg = "User "+client.name+" is now offline.";
         System.out.println(msg);
         ClientHandlers.remove(client);
     }
 
     // Broadcaster as the name says, sending the message to all clients
     public static void Broadcaster(String msg, Clients sender) {
+        System.out.println(sender.name+": "+msg);
         synchronized(ClientHandlers) {
             for (Clients client : ClientHandlers) {
-                if (client != sender) client.op.println(msg);
+                if (client != sender)  {
+                    client.op.println(msg);
+                }
             };
         };
     };
@@ -88,7 +91,9 @@ public class Server {
                 // The main loop of recieving and sync of messages across all clients
                 String message;
                 while ((message = ip.readLine()) != null) {
-                    if (message.equals(">exit")) break;
+                    if (message.equals(">exit")) {
+                        op.println("exitCommand"+name);
+                    }
                     else Broadcaster(name+": "+message, this);
                 }
 
