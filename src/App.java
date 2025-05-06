@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 
@@ -16,7 +17,7 @@ public class App {
         PrintWriter op = new PrintWriter(con.getOutputStream(), true);
         Scanner inp = new Scanner(System.in);
         System.out.print(ip.readLine());
-        user = inp.next();
+        user = inp.nextLine();
         System.out.println("\nRegestering....");
         Thread reader = new Thread(new Reader(ip));
         reader.start();
@@ -24,14 +25,14 @@ public class App {
 
         try {
             String msg;
-            while ((msg = inp.next())!= null) {
+            while ((msg = inp.nextLine())!= null) {
                 if (msg.equals(">exit"))  { 
                     System.out.println("Thanks for using this chatroom.");
-                    break; 
+                    op.close();
+                    con.close();
+                    break;
                 }
-                else {
-                    op.println(msg);
-                }
+                op.println(msg);
             }
         } catch (Exception E) {
             E.printStackTrace();
@@ -50,20 +51,23 @@ public class App {
         public void run() {
             String msg;
             try {
-                while ((msg = ip.readLine()) != null) {
-                    if (msg.equals("exitCommand"+user)) {
-                        break;
-                    }
-                    else {
+                while (!con.isClosed()) {
+                    msg = ip.readLine();
+                    if (msg != null) {
                         System.out.println(msg);
                     }
+                }
+            } catch (SocketException Err) {
+                if (Err.getMessage().contains("Socket closed")) {
+                    System.out.println("Disconnected from the server");
                 }
             } catch (Exception E) {
                 E.printStackTrace();
             } finally {
                 System.out.println("The Reader is now closed.");
                 try {
-                    con.close();
+                    ip.close();
+                    System.exit(0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

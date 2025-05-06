@@ -1,12 +1,12 @@
-import java.util.Properties;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
+// import java.nio.file.Files;
+// import java.nio.file.Path;
+// import java.util.Properties;
 import java.util.Date;
 import java.util.Collections;
 import java.util.Set;
@@ -19,7 +19,7 @@ public class Server {
     // Client Handler (ArrayList would work but since it ain't built thread safe then I am not using it)
 
 
-    private static Properties prop = new Properties(); // To load ENV File from the bin folder
+    // private static Properties prop = new Properties(); // To load ENV File from the bin folder
     public static void main(String[] args) throws IOException {
 
         ServerSocket server = new ServerSocket(4999); // Average Socket number that came in my mind
@@ -36,10 +36,10 @@ public class Server {
     };
 
     // To load the credentials which will be worked upon later....
-    private static void initializer() throws IOException {
-        prop.load(Files.newInputStream(Path.of("./bin/.env")));
+    // private static void initializer() throws IOException {
+    //     prop.load(Files.newInputStream(Path.of("./bin/.env")));
 
-    }
+    // }
 
     // When Client Disconnects
     public static void disconnect(Clients client) {
@@ -91,10 +91,7 @@ public class Server {
                 // The main loop of recieving and sync of messages across all clients
                 String message;
                 while ((message = ip.readLine()) != null) {
-                    if (message.equals(">exit")) {
-                        op.println("exitCommand"+name);
-                    }
-                    else Broadcaster(name+": "+message, this);
+                    Broadcaster(name+": "+message, this); 
                 }
 
                 
