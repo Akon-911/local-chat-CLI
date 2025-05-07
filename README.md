@@ -1,6 +1,10 @@
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+A Simple CLI-Based Chatting app built through Java. Follow the Folder Structure in order to use it.
+
+## Preview
+
+<img src="CLI-Chat-App.gif" height="500" width="750">
 
 ## Folder Structure
 
